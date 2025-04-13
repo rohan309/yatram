@@ -24,7 +24,9 @@ public class BaseClass {
         capabilities.setCapability("appium:automationName", "uiautomator2");
         capabilities.setCapability("appium:appPackage", "com.pavitramcustomerapp");
         capabilities.setCapability("appium:appActivity", "com.pavitramcustomerapp.MainActivity");
+//        capabilities.setCapability("app", System.getProperty("user.dir") + "/src/main/resources/Pavitram-Customer-V1.apk");
         capabilities.setCapability("appium:newCommandTimeout", 60);
+
 
         try {
             URL url = new URL("http://127.0.0.1:4723/");

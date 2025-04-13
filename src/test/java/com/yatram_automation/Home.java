@@ -21,17 +21,17 @@ public class Home extends BaseClass {
     PropertyHandler propertyHandler;
 
     @BeforeClass
-    public void setUp(){
+    public void setUp() {
         launchApp();
-        LoginPage loginPage=new LoginPage(driver);
-        propertyHandler=new PropertyHandler();
+        LoginPage loginPage = new LoginPage(driver);
+        propertyHandler = new PropertyHandler();
         loginPage.login(propertyHandler.getValue("mobileNumber"));
-        homePage=new HomePage();
+        homePage = new HomePage();
 
     }
 
     @AfterClass
-    public void tearDown(){
+    public void tearDown() {
         driver.quit();
     }
 
@@ -59,4 +59,17 @@ public class Home extends BaseClass {
         Thread.sleep(3000);
 
     }
+
+    @Test
+    public void logout() throws InterruptedException {
+        waitForElementForClickable(homePage.userProfile);
+        tap(homePage.userProfile);
+        waitForElementForClickable(homePage.logoutOption);
+        tap(homePage.logoutOption);
+        waitForElementForClickable(homePage.confirmLogout);
+        tap(homePage.confirmLogout);
+
+    }
+
 }
+
