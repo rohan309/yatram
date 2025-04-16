@@ -1,14 +1,20 @@
 package com.yatram_automation.utility;
 
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -38,21 +44,67 @@ public class BaseClass {
         }
     }
 
-    public void waitForElementForClickable(By by){
-        WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+    public void waitForElementForClickable(By by) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(by));
     }
 
-    public void enterText(By by,String text){
+    public void enterText(By by, String text) {
         driver.findElement(by).sendKeys(text);
     }
 
-    public void tap(By by){
+    public void tap(By by) {
         driver.findElement(by).click();
     }
 
-    public void tapOnTick(){
+    public void tapOnTick() {
         ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.ENTER));
 
     }
+
+    public void scrollToElement(AndroidDriver driver, By by) {
+        int maxScrolls = 10; // limit scrolls to avoid infinite loops
+        boolean found = false;
+
+        for (int i = 0; i < maxScrolls; i++) {
+            try {
+                WebElement element = driver.findElement(by);
+                if (element.isDisplayed()) {
+                    System.out.println("Element is visible after scrolling.");
+                    found = true;
+                    break;
+                }
+            } catch (Exception ignored) {
+            }
+
+            // Scroll down using TouchAction
+            Dimension size = driver.manage().window().getSize();
+            int startX = size.width / 2;
+            int startY = (int) (size.height * 0.7);
+            int endY = (int) (size.height * 0.3);
+
+            new TouchAction<>(driver)
+                    .press(PointOption.point(startX, startY))
+                    .waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
+                    .moveTo(PointOption.point(startX, endY))
+                    .release()
+                    .perform();
+        }
+
+        if (!found) {
+            throw new RuntimeException("Element not found after scrolling.");
+        }
+    }
+
+    public void uploadImage(String mobFilePath, String machineFilePath) {
+        try {
+            ((AndroidDriver) driver).pushFile(
+                    mobFilePath,
+                    new File(machineFilePath)
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

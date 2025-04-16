@@ -1,12 +1,10 @@
 package com.yatram_automation;
 
+import com.github.javafaker.Faker;
 import com.yatram_automation.pages.HomePage;
 import com.yatram_automation.pages.LoginPage;
 import com.yatram_automation.utility.BaseClass;
 import com.yatram_automation.utility.PropertyHandler;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.nativekey.AndroidKey;
-import io.appium.java_client.android.nativekey.KeyEvent;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -68,6 +66,42 @@ public class Home extends BaseClass {
         tap(homePage.logoutOption);
         waitForElementForClickable(homePage.confirmLogout);
         tap(homePage.confirmLogout);
+
+    }
+
+    @Test
+    public void addFeedback() throws InterruptedException {
+        tap(homePage.userProfile);
+        waitForElementForClickable(homePage.contactUsOption);
+        tap(homePage.contactUsOption);
+
+        Faker faker = new Faker();
+        String name = faker.name().fullName();
+
+        enterText(homePage.feedbackName, name);
+        String feedback = faker.lorem().sentence();
+        enterText(homePage.feedback, feedback);
+        tap(homePage.attachScrrenShot);
+        tap(homePage.openSetting);
+        waitForElementForClickable(homePage.permission);
+        tap(homePage.permission);
+        tap(homePage.photoAndVideo);
+        waitForElementForClickable(homePage.alwaysAllowAll);
+        tap(homePage.alwaysAllowAll);
+        tap(homePage.backSettings);
+        tap(homePage.backSettings);
+        tap(homePage.finalBack);
+
+        String mobFilePath = propertyHandler.getValue("mobFilePath");
+        String machineFilePath = propertyHandler.getValue("machineFilePath");
+
+        uploadImage(mobFilePath, machineFilePath);
+        tap(homePage.attachScrrenShot);
+        waitForElementForClickable(homePage.selectImage);
+        tap(homePage.selectImage);
+        tap(homePage.submitBtn);
+        tap(homePage.backToHome);
+
 
     }
 
