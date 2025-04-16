@@ -6,9 +6,8 @@ import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,6 +17,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BaseClass {
     public AndroidDriver driver;
@@ -47,6 +48,11 @@ public class BaseClass {
     public void waitForElementForClickable(By by) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(by));
+    }
+
+    public void waitForElementsVisible(By by) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
     }
 
     public void enterText(By by, String text) {
@@ -104,6 +110,18 @@ public class BaseClass {
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void takeScreenshot() {
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String fileName = "ScreenShot_"+ timestamp + ".png";
+        String destPath = System.getProperty("user.dir") + "/ScreenShots/" + fileName;
+
+        File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(srcFile, new File(destPath));
+        } catch (IOException e) {
         }
     }
 

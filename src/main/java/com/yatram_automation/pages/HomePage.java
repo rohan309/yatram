@@ -25,7 +25,16 @@ public class HomePage {
     public By album=By.xpath("//androidx.compose.ui.platform.ComposeView/android.view.View/android.view.View/android.view.View[3]/android.widget.Button");
     public By testingAlbum=By.xpath("//android.widget.TextView[@text=\"TestingImages\"]");
     public By selectImage= By.xpath("//androidx.compose.ui.platform.ComposeView/android.view.View/android.view.View/android.view.View[5]/android.view.View[1]/android.view.View[2]/android.view.View");
-
+    public By donateBtn=By.xpath("//android.view.ViewGroup[@content-desc=\"Donate\"]");
+    public By donorName=By.xpath("(//android.view.ViewGroup[@resource-id=\"text-input-outline\"])[1]");
+    public By donorEmail=By.xpath("(//android.view.ViewGroup[@resource-id=\"text-input-outline\"])[2]");
+    public By donorContact=By.xpath("(//android.view.ViewGroup[@resource-id=\"text-input-outline\"])[3]");
+    public By amount=By.xpath("(//android.view.ViewGroup[@resource-id=\"text-input-outline\"])[4]");
+    public By note=By.xpath("//android.widget.EditText[@resource-id=\"text-input-outlined\" and @text=\"Write notes\"]");
+    public By proceed=By.xpath("//android.view.ViewGroup[@content-desc=\"Proceed\"]");
+    public By backFromDonation=By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]");
+    public By transactions = By.xpath("//android.view.ViewGroup[contains(@content-desc, 'All Transactions')]");
+    public By allTransactions=By.xpath("//android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup");
 
 
 

@@ -12,7 +12,10 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Home extends BaseClass {
     HomePage homePage;
@@ -103,6 +106,57 @@ public class Home extends BaseClass {
         tap(homePage.backToHome);
 
 
+    }
+
+    @Test
+    public void allTransactions() throws InterruptedException {
+        tap(homePage.userProfile);
+        Thread.sleep(1000);
+        tap(homePage.transactions);
+        Thread.sleep(1000);
+        takeScreenshot();
+
+        List<Map<String, String>> pendingPayments = new ArrayList<>();
+        List<Map<String, String>> completedPayments = new ArrayList<>();
+
+        waitForElementsVisible(homePage.allTransactions);
+        List<WebElement> allPayments = driver.findElements(homePage.allTransactions);
+
+        for (WebElement payment : allPayments) {
+            try {
+                String amount = payment.findElement(By.xpath(".//android.widget.TextView[1]")).getText();
+                String type = payment.findElement(By.xpath(".//android.widget.TextView[2]")).getText();
+                String txnId = payment.findElement(By.xpath(".//android.widget.TextView[3]")).getText();
+                String time = payment.findElement(By.xpath(".//android.widget.TextView[4]")).getText();
+                String status = payment.findElement(By.xpath(".//android.widget.TextView[5]")).getText();
+
+                Map<String, String> paymentData = new HashMap<>();
+                paymentData.put("Amount", amount);
+                paymentData.put("Type", type);
+                paymentData.put("Txn ID", txnId);
+                paymentData.put("Time", time);
+                paymentData.put("Status", status);
+
+                if (status.equals("Pending")) {
+                    pendingPayments.add(paymentData);
+                } else if (status.equalsIgnoreCase("Completed")) {
+                    completedPayments.add(paymentData);
+                }
+
+            } catch (Exception e) {
+                System.out.println("Skipped one payment block: " + e.getMessage());
+            }
+        }
+
+        System.out.println("=== Pending Payments ===");
+        for (Map<String, String> pay : pendingPayments) {
+            System.out.println(pay);
+        }
+
+        System.out.println("\n=== Completed Payments ===");
+        for (Map<String, String> pay : completedPayments) {
+            System.out.println(pay);
+        }
     }
 
 }
