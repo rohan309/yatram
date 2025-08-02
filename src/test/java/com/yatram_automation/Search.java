@@ -50,6 +50,20 @@ public class Search extends BaseClass {
                 System.out.println(text.getText());
             }
         }
+        /*for (int i = 0; i < listOfCategories.size(); i++) {
+            int retries = 0;
+            boolean printed = false;
+            while (retries < 3 && !printed) {
+                try {
+                    WebElement element = driver.findElements(searchPage.horizontalCards).get(i); // re-initialization
+                    System.out.println(element.getText());
+                    printed = true;
+                } catch (StaleElementReferenceException e) {
+                    retries++;
+                    Thread.sleep(500); // optional delay between retries
+                }
+            }
+        }*/
     }
 
 }
