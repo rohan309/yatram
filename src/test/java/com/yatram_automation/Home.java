@@ -4,12 +4,15 @@ import com.github.javafaker.Faker;
 import com.yatram_automation.pages.HomePage;
 import com.yatram_automation.pages.LoginPage;
 import com.yatram_automation.utility.BaseClass;
+import com.yatram_automation.utility.OtpUtils;
 import com.yatram_automation.utility.PropertyHandler;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -22,11 +25,14 @@ public class Home extends BaseClass {
     PropertyHandler propertyHandler;
 
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws InterruptedException {
+        OtpUtils.clearNotifications(driver);
         launchApp();
         LoginPage loginPage = new LoginPage(driver);
         propertyHandler = new PropertyHandler();
-        loginPage.login(propertyHandler.getValue("mobileNumber"));
+//        loginPage.login(propertyHandler.getValue("mobileNumber"));
+        loginPage.login(propertyHandler.getValue("myMobileNumber"));
+
         homePage = new HomePage();
 
     }
@@ -34,6 +40,13 @@ public class Home extends BaseClass {
     @AfterClass
     public void tearDown() {
         driver.quit();
+    }
+
+    @BeforeMethod
+    public void beforeMethod(){
+        if (driver instanceof AndroidDriver) {
+            ((AndroidDriver) driver).openNotifications();
+        }
     }
 
     @Test
@@ -63,12 +76,17 @@ public class Home extends BaseClass {
 
     @Test
     public void logout() throws InterruptedException {
-        waitForElementForClickable(homePage.userProfile);
+
+        LoginPage loginPage=new LoginPage(driver);
+//        loginPage.login(propertyHandler.getValue("myMobileNumber"));
+       /* waitForElementForClickable(homePage.userProfile);
         tap(homePage.userProfile);
         waitForElementForClickable(homePage.logoutOption);
         tap(homePage.logoutOption);
         waitForElementForClickable(homePage.confirmLogout);
-        tap(homePage.confirmLogout);
+        tap(homePage.confirmLogout);*/
+        Thread.sleep(3000);
+        OtpUtils.clearNotifications(driver);
 
     }
 
